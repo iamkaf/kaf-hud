@@ -1,0 +1,9 @@
+{
+  "key.categories.kafhud": "Kaf HUD",
+  "key.kafhud.toggle_hud": "Toggle HUD",
+  "text.kafhud.direction.north": "north",
+  "text.kafhud.direction.south": "south",
+  "text.kafhud.direction.east": "east",
+  "text.kafhud.direction.west": "west",
+  "text.kafhud.coordinates_copied": "§e[*] §fCoordinates copied to clipboard: %s"
+}
