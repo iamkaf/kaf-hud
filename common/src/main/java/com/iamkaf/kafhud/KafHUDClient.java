@@ -31,6 +31,10 @@ public class KafHUDClient {
             return;
         }
 
+        if (Minecraft.getInstance().options.hideGui) {
+            return;
+        }
+
         if (!enabled) {
             return;
         }
