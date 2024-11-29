@@ -8,6 +8,17 @@ dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
 }
 
+def extractLatestChangelog() {
+    // Read the changelog file
+    def changelogFile = file('../changelog.md').text
+
+    // Use regex to match the first section of the changelog (latest version and its changes)
+    def changelog = (changelogFile =~ /## [\s\S]+(?=\n##)/)[0]
+
+    // Return the changelog string
+    return changelog
+}
+
 publisher {
     // Setup the required API keys. You only need to define the keys for
     // the platforms you plan on uploading to
@@ -35,7 +46,7 @@ publisher {
     // For example: markdown.md, or "This is my changelog"
     // Or: https://raw.githubusercontent.com/hypherionmc/changelogs/changelog.md
     // Or https://gist.githubusercontent.com/hypherionmc/92f825d3c9337964cc77c9c8c9bf65e6/raw/ceeaaee5b98c688a23398864fe480b84796a1651/test_gist.md
-    setChangelog("See the full changelog at https://github.com/iamkaf/kaf-hud/commits/main")
+    setChangelog(extractLatestChangelog())
 
     // Required for Modrinth/GitHub
     setProjectVersion("$mod_id-$project.name-$project.minecraft_version-$project.version")

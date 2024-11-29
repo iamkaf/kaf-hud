@@ -10,13 +10,25 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class KafHUDClient {
     public static final int WHITE = 0xffffff;
+    public static final int RED = 0xdb3559;
     public static final int OUTLINE_COLOR = 0x0b2347;
     public static final int TRANSPARENT = -1;
 
@@ -27,11 +39,13 @@ public class KafHUDClient {
     }
 
     public static void onRenderHUD(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-        if (Minecraft.getInstance().getDebugOverlay().showDebugScreen()) {
+        Minecraft mc = Minecraft.getInstance();
+
+        if (mc.getDebugOverlay().showDebugScreen()) {
             return;
         }
 
-        if (Minecraft.getInstance().options.hideGui) {
+        if (mc.options.hideGui) {
             return;
         }
 
@@ -39,8 +53,8 @@ public class KafHUDClient {
             return;
         }
 
-        Font textRenderer = Minecraft.getInstance().font;
-        LocalPlayer player = Minecraft.getInstance().player;
+        Font textRenderer = mc.font;
+        LocalPlayer player = mc.player;
 
         int xPadding = 2;
         int yPadding = 2;
@@ -53,6 +67,8 @@ public class KafHUDClient {
             return;
         }
 
+        Level level = player.level();
+
         double x = player.getX();
         double y = player.getY();
         double z = player.getZ();
@@ -61,7 +77,7 @@ public class KafHUDClient {
         String directionName =
                 Component.translatable(String.format("text.kafhud.direction.%s", direction.getName()))
                         .getString();
-        Holder<Biome> biome = player.level().getBiome(player.blockPosition());
+        Holder<Biome> biome = level.getBiome(player.blockPosition());
         String biomeNamespace = biome.getRegisteredName().split(":")[0];
         String biomePath = biome.getRegisteredName().split(":")[1];
 
@@ -77,8 +93,34 @@ public class KafHUDClient {
 
         int coordinatesWidth = textRenderer.width(coordinatesComponent.getString()) + 4;
 
-        text(
-                guiGraphics,
+
+        // this code is mega nested for performance
+        if (player.swinging) {
+            ItemStack heldItem = player.getMainHandItem();
+            Tool toolComponent = heldItem.get(DataComponents.TOOL);
+            if (toolComponent != null) {
+                BlockHitResult hitResult = raytrace(level, player);
+                BlockState aimedBlock = level.getBlockState(hitResult.getBlockPos());
+                if (aimedBlock.requiresCorrectToolForDrops() && !aimedBlock.isAir() && !toolComponent.isCorrectForDrops(
+                        aimedBlock) && !player.hasInfiniteMaterials()) {
+                    int screenWidth = guiGraphics.guiWidth();
+                    int centerX = screenWidth / 2;
+                    int centerY = 1 + yPadding;
+                    Component indicatorComponent = Component.translatable("text.kafhud.wrong_tool_indicator");
+                    int widgetWidth = textRenderer.width(indicatorComponent);
+                    text(guiGraphics,
+                            textRenderer,
+                            indicatorComponent,
+                            centerX - (widgetWidth / 2),
+                            centerY,
+                            RED,
+                            TRANSPARENT
+                    );
+                }
+            }
+        }
+
+        text(guiGraphics,
                 textRenderer,
                 coordinatesComponent,
                 xGlobalOffset,
@@ -86,8 +128,7 @@ public class KafHUDClient {
                 WHITE,
                 OUTLINE_COLOR
         );
-        text(
-                guiGraphics,
+        text(guiGraphics,
                 textRenderer,
                 directionComponent,
                 xGlobalOffset + coordinatesWidth,
@@ -95,8 +136,7 @@ public class KafHUDClient {
                 getDirectionColor(direction),
                 OUTLINE_COLOR
         );
-        text(
-                guiGraphics,
+        text(guiGraphics,
                 textRenderer,
                 biomeComponent,
                 xGlobalOffset,
@@ -123,8 +163,7 @@ public class KafHUDClient {
             return;
         }
 
-        font.drawInBatch8xOutline(
-                message.getVisualOrderText(),
+        font.drawInBatch8xOutline(message.getVisualOrderText(),
                 x,
                 y,
                 color,
@@ -175,5 +214,19 @@ public class KafHUDClient {
             }
             copyCoordinates();
         }
+    }
+
+    public static @NotNull BlockHitResult raytrace(Level level, Player player) {
+        Vec3 eyePosition = player.getEyePosition();
+        Vec3 rotation = player.getViewVector(1);
+        double reach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
+        Vec3 combined = eyePosition.add(rotation.x * reach, rotation.y * reach, rotation.z * reach);
+
+        return level.clip(new ClipContext(eyePosition,
+                combined,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player
+        ));
     }
 }

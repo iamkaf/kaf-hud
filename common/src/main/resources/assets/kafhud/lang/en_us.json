@@ -5,5 +5,7 @@
   "text.kafhud.direction.south": "south",
   "text.kafhud.direction.east": "east",
   "text.kafhud.direction.west": "west",
-  "text.kafhud.coordinates_copied": "§e[*] §fCoordinates copied to clipboard: %s"
+  "text.kafhud.coordinates_copied": "§e[*] §fCoordinates copied to clipboard: %s",
+
+  "text.kafhud.wrong_tool_indicator": "Wrong Tool!"
 }

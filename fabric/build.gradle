@@ -4,6 +4,17 @@ plugins {
 
 apply from: "https://raw.githubusercontent.com/iamkaf/modresources/refs/heads/main/gradle/1.21.1_no_dependency/fabric.gradle"
 
+def extractLatestChangelog() {
+    // Read the changelog file
+    def changelogFile = file('../changelog.md').text
+
+    // Use regex to match the first section of the changelog (latest version and its changes)
+    def changelog = (changelogFile =~ /## [\s\S]+(?=\n##)/)[0]
+
+    // Return the changelog string
+    return changelog
+}
+
 dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_api_version"
@@ -36,10 +47,10 @@ publisher {
     // For example: markdown.md, or "This is my changelog"
     // Or: https://raw.githubusercontent.com/hypherionmc/changelogs/changelog.md
     // Or https://gist.githubusercontent.com/hypherionmc/92f825d3c9337964cc77c9c8c9bf65e6/raw/ceeaaee5b98c688a23398864fe480b84796a1651/test_gist.md
-    setChangelog("See the full changelog at https://github.com/iamkaf/kaf-hud/commits/main")
+    setChangelog(extractLatestChangelog())
 
     // Required for Modrinth/GitHub
-    setProjectVersion("$mod_id-$project.name-$project.minecraft_version-$project.version")
+    setProjectVersion(mod_version)
 
     // Fancy display name for the upload.
     // Will default to the project version if not set
