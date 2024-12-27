@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -163,13 +164,15 @@ public class KafHUDClient {
             return;
         }
 
+        MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
+
         font.drawInBatch8xOutline(message.getVisualOrderText(),
                 x,
                 y,
                 color,
                 outlineColor,
                 context.pose().last().pose(),
-                context.bufferSource(),
+                buffers,
                 15728880
         );
         context.flush();
@@ -192,8 +195,8 @@ public class KafHUDClient {
         String coordinates = String.format("%.2f %.2f %.2f", player.getX(), player.getY(), player.getZ());
         Minecraft.getInstance().keyboardHandler.setClipboard(coordinates);
 
-        player.sendSystemMessage(Component.translatable("text.kafhud.coordinates_copied", coordinates)
-                .withStyle(Style.EMPTY.withColor(0xfcb8de)));
+        player.displayClientMessage(Component.translatable("text.kafhud.coordinates_copied", coordinates)
+                .withStyle(Style.EMPTY.withColor(0xfcb8de)), false);
 
         Minecraft.getInstance()
                 .getSoundManager()

@@ -57,7 +57,7 @@ publisher {
 
     // The supported game versions
     gameVersions.unset()
-    setGameVersions("1.21", "1.21.1")
+    setGameVersions("1.21.4")
 
     // The modloaders your upload supports.
     // This can also be an Enum from ModLoader,
