@@ -57,7 +57,7 @@ publisher {
     setDisplayName("$mod_id-$project.name-$project.minecraft_version-$project.version")
 
     // The supported game versions
-    setGameVersions("1.21.4")
+    setGameVersions(minecraft_version)
 
     // The modloaders your upload supports.
     // This can also be an Enum from ModLoader,

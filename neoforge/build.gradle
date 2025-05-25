@@ -49,7 +49,7 @@ publisher {
     setChangelog(extractLatestChangelog())
 
     // Required for Modrinth/GitHub
-    setProjectVersion("$mod_id-$project.name-$project.minecraft_version-$project.version")
+    setProjectVersion(mod_version)
 
     // Fancy display name for the upload.
     // Will default to the project version if not set
@@ -57,7 +57,7 @@ publisher {
 
     // The supported game versions
     gameVersions.unset()
-    setGameVersions("1.21.4")
+    setGameVersions(minecraft_version)
 
     // The modloaders your upload supports.
     // This can also be an Enum from ModLoader,

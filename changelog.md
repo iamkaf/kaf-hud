@@ -2,6 +2,11 @@
 
 See the full changelog at https://github.com/iamkaf/kaf-hud/commits/main
 
+## 1.3.0
+
+- feat: port to 1.21.5
+- feat: remove the unobtrusive tool harvestability indicator 
+
 ## 1.2.0
 
 - feat: port to 1.21.4
