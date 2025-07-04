@@ -1,5 +1,9 @@
 package com.iamkaf.kafhud;
 
+import com.iamkaf.amber.api.common.client.CommonClientUtils;
+import com.iamkaf.amber.api.event.v1.events.common.client.ClientTickEvents;
+import com.iamkaf.amber.api.event.v1.events.common.client.HudEvents;
+import com.iamkaf.amber.api.platform.v1.Platform;
 import com.iamkaf.kafhud.registry.Keybinds;
 import com.iamkaf.kafhud.util.StringUtil;
 import net.minecraft.client.DeltaTracker;
@@ -7,32 +11,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
 public class KafHUDClient {
-    public static final int WHITE = 0xffffff;
-    public static final int RED = 0xdb3559;
-    public static final int OUTLINE_COLOR = 0x0b2347;
-    public static final int TRANSPARENT = -1;
-
     public static boolean enabled = true;
 
-    public static void init() {
+    static {
         Keybinds.init();
+    }
+
+    public static void init() {
+        Constants.LOG.info("Initializing KafHUDClient on {}...", Platform.getPlatformName());
+        ClientTickEvents.END_CLIENT_TICK.register(KafHUDClient::onClientTick);
+        HudEvents.RENDER_HUD.register(KafHUDClient::onRenderHUD);
     }
 
     public static void onRenderHUD(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
@@ -50,11 +48,11 @@ public class KafHUDClient {
             return;
         }
 
-        Font textRenderer = mc.font;
+        Font font = mc.font;
         LocalPlayer player = mc.player;
 
-        int xPadding = 2;
-        int yPadding = 2;
+        int xPadding = 3;
+        int yPadding = 3;
         int lineSpacing = 10;
 
         int xGlobalOffset = 1 + xPadding;
@@ -64,21 +62,49 @@ public class KafHUDClient {
             return;
         }
 
-        Level level = player.level();
+        Component coordinatesComponent = makeCoordinatesComponent(player);
+        Component directionComponent = makeDirectionComponent(player);
+        Component biomeComponent = makeBiomeComponent(player);
 
+        int coordinatesWidth = font.width(coordinatesComponent.getString()) + 4;
+
+        CommonClientUtils.text(guiGraphics, font, coordinatesComponent, xGlobalOffset, yOffset, CommonClientUtils.WHITE);
+        CommonClientUtils.text(
+                guiGraphics,
+                font,
+                directionComponent,
+                xGlobalOffset + coordinatesWidth,
+                yOffset,
+                getDirectionColor(player.getDirection())
+        );
+        CommonClientUtils.text(
+                guiGraphics,
+                font,
+                biomeComponent,
+                xGlobalOffset,
+                yOffset + lineSpacing,
+                CommonClientUtils.WHITE
+        );
+    }
+
+    private static Component makeCoordinatesComponent(Player player) {
         double x = player.getX();
         double y = player.getY();
         double z = player.getZ();
+        return Component.literal(String.format("XYZ: %.1f / %.1f / %.1f", x, y, z));
+    }
 
+    private static Component makeDirectionComponent(Player player) {
         Direction direction = player.getDirection();
         String directionName =
                 Component.translatable(String.format("text.kafhud.direction.%s", direction.getName())).getString();
-        Holder<Biome> biome = level.getBiome(player.blockPosition());
+        return Component.literal(String.format("(%s)", directionName));
+    }
+
+    private static Component makeBiomeComponent(Player player) {
+        Holder<Biome> biome = player.level().getBiome(player.blockPosition());
         String biomeNamespace = biome.getRegisteredName().split(":")[0];
         String biomePath = biome.getRegisteredName().split(":")[1];
-
-        Component coordinatesComponent = Component.literal(String.format("XYZ: %.1f / %.1f / %.1f", x, y, z));
-        Component directionComponent = Component.literal(String.format("(%s)", directionName));
         Component biomeComponent = Component.translatable(String.format("biome.%s.%s", biomeNamespace, biomePath));
 
         // untranslated biome names
@@ -86,51 +112,17 @@ public class KafHUDClient {
         if (biomeComponent.getString().startsWith("biome.")) {
             biomeComponent = Component.literal(StringUtil.toReadableSentence(biomePath));
         }
-
-        int coordinatesWidth = textRenderer.width(coordinatesComponent.getString()) + 4;
-
-        text(guiGraphics, textRenderer, coordinatesComponent, xGlobalOffset, yOffset, WHITE, OUTLINE_COLOR);
-        text(
-                guiGraphics,
-                textRenderer,
-                directionComponent,
-                xGlobalOffset + coordinatesWidth,
-                yOffset,
-                getDirectionColor(direction),
-                OUTLINE_COLOR
-        );
-        text(guiGraphics, textRenderer, biomeComponent, xGlobalOffset, yOffset + lineSpacing, WHITE, OUTLINE_COLOR);
+        return biomeComponent;
     }
 
     private static int getDirectionColor(Direction direction) {
         return switch (direction) {
-            case NORTH -> 0x4287f5;
-            case SOUTH -> 0xf5ce42;
-            case WEST -> 0x98ffad;
-            case EAST -> 0xeb73a9;
-            default -> 0xffffff;
+            case NORTH -> 0xff4287f5;
+            case SOUTH -> 0xfff5ce42;
+            case WEST -> 0xff98ffad;
+            case EAST -> 0xffeb73a9;
+            default -> 0xffffffff;
         };
-    }
-
-    private static void text(GuiGraphics context, Font font, Component message, int x, int y, int color, int outlineColor) {
-        if (outlineColor == TRANSPARENT) {
-            context.drawString(font, message, x, y, color, false);
-            return;
-        }
-
-        MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
-
-        font.drawInBatch8xOutline(
-                message.getVisualOrderText(),
-                x,
-                y,
-                color,
-                outlineColor,
-                context.pose().last().pose(),
-                buffers,
-                15728880
-        );
-        context.flush();
     }
 
     public static void toggle() {
@@ -170,14 +162,5 @@ public class KafHUDClient {
             }
             copyCoordinates();
         }
-    }
-
-    public static @NotNull BlockHitResult raytrace(Level level, Player player) {
-        Vec3 eyePosition = player.getEyePosition();
-        Vec3 rotation = player.getViewVector(1);
-        double reach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
-        Vec3 combined = eyePosition.add(rotation.x * reach, rotation.y * reach, rotation.z * reach);
-
-        return level.clip(new ClipContext(eyePosition, combined, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
     }
 }

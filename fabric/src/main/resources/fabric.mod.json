@@ -1,35 +1,40 @@
 {
-  "schemaVersion": 1,
-  "id": "${mod_id}",
-  "version": "${mod_version}",
-  "name": "${mod_name}",
-  "description": "${mod_description}",
-  "authors": [
-    "${mod_author}"
-  ],
-  "contact": {
-    "homepage": "${mod_page_url}",
-    "issues": "${mod_issue_url}",
-    "sources": "${mod_page_url}"
-  },
-  "license": "${mod_license}",
-  "icon": "assets/${mod_id}/icon.png",
-  "environment": "${mod_fabric_environment}",
-  "entrypoints": {
-    "main": [
-      "${main_entrypoint}"
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
     ],
-    "client": [
-      "${client_entrypoint}"
-    ]
-  },
-  "mixins": [
-    "${mod_id}.mixins.json"
-  ],
-  "depends": {
-    "fabricloader": ">=${fabric_loader_version}",
-    "minecraft": ">=${minecraft_version}",
-    "java": ">=21",
-    "fabric-api": "*"
-  }
+    "contact": {
+        "homepage": "https://fabricmc.net/",
+        "sources": "https://github.com/FabricMC/fabric-KafHUD-mod"
+    },
+    "license": "${license}",
+    "icon": "icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "main": [
+            "com.iamkaf.kafhud.KafHUDFabric"
+        ],
+        "client": [
+            "com.iamkaf.kafhud.client.KafHUDClientFabric"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json",
+        "${mod_id}.fabric.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": "*",
+        "amber": ">=${amber_version}",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=${java_version}"
+    },
+    "suggests": {
+        "modmenu": ">=${mod_menu_version}"
+    }
 }
+  
