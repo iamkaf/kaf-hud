@@ -8,8 +8,8 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-KafHUD-mod"
+        "homepage": "https://iamkaf.com",
+        "sources": "https://github.com/iamkaf/kaf-hud"
     },
     "license": "${license}",
     "icon": "icon.png",
