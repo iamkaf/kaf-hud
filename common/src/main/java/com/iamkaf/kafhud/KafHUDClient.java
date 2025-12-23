@@ -108,9 +108,12 @@ public class KafHUDClient {
         Component biomeComponent = Component.translatable(String.format("biome.%s.%s", biomeNamespace, biomePath));
 
         // untranslated biome names
-        // TODO: handle names with / or other special characters (e.g. "terralith:caves/frostfire_caves")
         if (biomeComponent.getString().startsWith("biome.")) {
-            biomeComponent = Component.literal(StringUtil.toReadableSentence(biomePath));
+            // Handle names with / - use only the last segment (e.g. "caves/frostfire_caves" -> "frostfire_caves")
+            String lastSlashIndex = biomePath.contains("/")
+                ? biomePath.substring(biomePath.lastIndexOf("/") + 1)
+                : biomePath;
+            biomeComponent = Component.literal(StringUtil.toReadableSentence(lastSlashIndex));
         }
         return biomeComponent;
     }

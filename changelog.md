@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 See the full changelog at https://github.com/iamkaf/kaf-hud
 
+## 3.0.0
+
+### Changed
+
+- Updated the mod to be compatible with Minecraft 1.21.10.
+
+### Fixed
+
+- Fixed biome name display for names with slashes (e.g. `terralith:caves/frostfire_caves` now displays as "Frostfire Caves").
+
 ## 2.0.0
 
 ### Added

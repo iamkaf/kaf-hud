@@ -1,5 +1,5 @@
 {
-  "key.categories.kafhud": "Kaf HUD",
+  "key.category.kafhud.kafhud": "Kaf HUD",
   "key.kafhud.toggle_hud": "Toggle HUD",
   "text.kafhud.direction.north": "north",
   "text.kafhud.direction.south": "south",
