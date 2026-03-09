@@ -5,20 +5,20 @@ plugins {
 }
 
 dependencies {
-    // Uncomment this line if you want to use Amber
-    implementation "com.iamkaf.amber:amber-neoforge:${amber_version}"
+    // Amber integration
+    implementation libs.amber.neoforge
 }
 
 neoForge {
-    version = neoforge_version
+    version = libs.neoforge.get().version.toString()
     // Automatically enable neoforge AccessTransformers if the file exists
     def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
     parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
+        minecraftVersion = libs.versions.parchment.minecraft.get()
+        mappingsVersion = libs.parchment.get().version.toString()
     }
     runs {
         configureEach {
@@ -42,7 +42,7 @@ neoForge {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+//sourceSets.main.resources.srcDir('src/generated/resources')
 
 publisher {
     // Setup the required API keys. You only need to define the keys for
@@ -67,14 +67,14 @@ publisher {
     // You can also use VersionType.BETA, VersionType.ALPHA or VersionType.RELEASE
     setVersionType(release_type)
 
-    setChangelog(extractHeaderLatestFooterFromChangelog(file('../changelog.md').text))
+    setChangelog(extractHeaderLatestFooterFromChangelog(file('../../changelog.md').text))
 
     // Required for Modrinth/GitHub
     setProjectVersion(rootProject.version)
 
     // Fancy display name for the upload.
     // Will default to the project version if not set
-    setDisplayName("$mod_id-$project.name-$project.minecraft_version-$project.version")
+    setDisplayName("$mod_id-$project.name-$project.version")
 
     // The supported game versions
     setGameVersions(game_versions.split(','))
