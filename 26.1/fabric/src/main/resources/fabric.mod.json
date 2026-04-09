@@ -1,0 +1,40 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "homepage": "https://iamkaf.com",
+        "sources": "https://github.com/iamkaf/kaf-hud"
+    },
+    "license": "${license}",
+    "icon": "icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "main": [
+            "com.iamkaf.kafhud.KafHUDFabric"
+        ],
+        "client": [
+            "com.iamkaf.kafhud.client.KafHUDClientFabric"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json",
+        "${mod_id}.fabric.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": "*",
+        "amber": ">=${amber_version}",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=${java_version}"
+    },
+    "suggests": {
+        "modmenu": ">=${mod_menu_version}"
+    }
+}
+  
