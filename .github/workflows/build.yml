@@ -115,47 +115,8 @@ jobs:
           path: ${{ matrix.loader }}/versions/${{ matrix.version }}/build/libs/*.jar
           if-no-files-found: error
 
-  test:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.versions != '[]'
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Detect Java version
-        id: java
-        shell: bash
-        run: |
-          set -euo pipefail
-          first_version=$(printf '%s\n' '${{ needs.detect-changes.outputs.versions }}' | jq -r '.[0]')
-          props="versions/$first_version/gradle.properties"
-          v=$(sed -nE 's/^project\.build-java=([0-9]+).*/\1/p' "$props" | head -n1)
-          if [ -z "$v" ]; then
-            v=$(sed -nE 's/^project\.java=([0-9]+).*/\1/p' "$props" | head -n1)
-          fi
-          echo "version=$v" >> "$GITHUB_OUTPUT"
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: ${{ steps.java.outputs.version }}
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: Setup just
-        uses: taiki-e/install-action@just
-
-      - name: Make gradlew executable
-        run: chmod +x gradlew
-
-      - name: Compile all changed nodes
-        run: just compile-all
-
   summary:
-    needs: [build, test]
+    needs: [build]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -163,4 +124,3 @@ jobs:
         run: |
           echo "## Build Results" >> "$GITHUB_STEP_SUMMARY"
           echo "Build status: ${{ needs.build.result }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "Test status: ${{ needs.test.result }}" >> "$GITHUB_STEP_SUMMARY"
