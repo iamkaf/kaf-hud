@@ -1,0 +1,63 @@
+{
+  "name": "kafhud-hud",
+  "setup": [
+    {
+      "action": "command",
+      "command": "/gamerule doDaylightCycle false"
+    },
+    {
+      "action": "command",
+      "command": "/time set 96000"
+    },
+    {
+      "action": "command",
+      "command": "/weather clear"
+    },
+    {
+      "action": "command",
+      "command": "/fill 10 179 -37 15 179 -32 minecraft:glass replace"
+    },
+    {
+      "action": "command",
+      "command": "/fill 10 180 -37 15 183 -32 minecraft:air replace"
+    },
+    {
+      "action": "command",
+      "command": "/tp @s 12.5 180 -34.5 90 0"
+    },
+    {
+      "action": "wait_ms",
+      "durationMs": 1000
+    }
+  ],
+  "steps": [
+    {
+      "action": "assert_player_position",
+      "x": 12.5,
+      "y": 180.0,
+      "z": -34.5,
+      "tolerance": 0.25
+    },
+    {
+      "action": "assert_player_rotation",
+      "yaw": 90.0,
+      "pitch": 0.0,
+      "tolerance": 0.5
+    },
+    {
+      "action": "screenshot",
+      "name": "kafhud-overlay-day-4",
+      "hideOverlay": true
+    }
+  ],
+  "cleanup": [
+    {
+      "action": "command",
+      "command": "/gamerule doDaylightCycle true"
+    },
+    {
+      "action": "command",
+      "command": "/fill 10 179 -37 15 183 -32 minecraft:air replace"
+    }
+  ]
+}
