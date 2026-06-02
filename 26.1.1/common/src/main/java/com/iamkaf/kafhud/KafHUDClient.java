@@ -65,6 +65,7 @@ public class KafHUDClient {
         Component coordinatesComponent = makeCoordinatesComponent(player);
         Component directionComponent = makeDirectionComponent(player);
         Component biomeComponent = makeBiomeComponent(player);
+        Component dayComponent = makeDayComponent(player);
 
         int coordinatesWidth = font.width(coordinatesComponent.getString()) + 4;
 
@@ -84,6 +85,14 @@ public class KafHUDClient {
                 xGlobalOffset,
                 yOffset + lineSpacing,
                 0xffffffff
+        );
+        ClientFunctions.renderText(
+                guiGraphics,
+                font,
+                dayComponent,
+                xGlobalOffset,
+                yOffset + lineSpacing * 2,
+                0xfff5ce42
         );
     }
 
@@ -116,6 +125,11 @@ public class KafHUDClient {
             biomeComponent = Component.literal(StringUtil.toReadableSentence(lastSlashIndex));
         }
         return biomeComponent;
+    }
+
+    private static Component makeDayComponent(Player player) {
+        long day = player.level().getOverworldClockTime() / 24000;
+        return Component.literal(String.format("Day: %d", day));
     }
 
     private static int getDirectionColor(Direction direction) {
