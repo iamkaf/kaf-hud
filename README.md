@@ -1,28 +1,35 @@
-# Multi-loader Mod Template
+# KafHUD
 
-This repository provides a basic template for creating Minecraft mods that target Fabric, Forge and NeoForge from the same codebase.
-It is adapted from [jaredlll08's MultiLoader-Template](https://github.com/jaredlll08/MultiLoader-Template) and stripped down to a minimal starting point.
-The original template repository lives at [iamkaf/template-mod](https://github.com/iamkaf/template-mod).
+KafHUD is a minimal location HUD for Fabric, Forge and NeoForge.
 
-## Getting started
+## Supported Versions
 
-1. Clone this repository.
-2. Run `python scripts/moddy.py setup` and answer the prompts. The script will
-   ask for your base package, mod id, name, author and initial version then
-   update packages, class names and identifiers accordingly, and insert the
-   version into `changelog.md`.
-3. When bumping to a new Minecraft version, run `python scripts/moddy.py set-minecraft-version <version>` to pull matching dependency versions.
-4. Replace the placeholder code in `TemplateMod` with your own logic.
-5. Run the Gradle `build` task to produce jars for each loader.
+The active Stonecutter baseline is Minecraft `26.1.2`.
+Older lines were removed during the Stonecutter rewrite setup and can be backported later from the active baseline.
 
 ## Directory layout
 
 - `common/` contains code shared between all loaders.
-- `fabric/`, `forge/` and `neoforge/` contain loader specific entry points and build logic.
-- `buildSrc/` holds the Gradle scripts that wire everything together.
+- `fabric/`, `forge/` and `neoforge/` contain loader-specific entry points and build logic.
+- `versions/<minecraft>/gradle.properties` contains version-specific Minecraft, Java, range, and loader metadata.
+- `stonecutter.gradle.kts` controls the active Stonecutter version and preprocessing rules.
 
-Feel free to expand upon this structure to suit the needs of your own mods.
+## Commands
 
-## Adding a new service
+List buildable Stonecutter nodes:
 
-Add a new platform service with `python scripts/moddy.py add-service <ServiceName>`.
+```bash
+just list-nodes
+```
+
+Build one node:
+
+```bash
+just build 26.1.2-fabric
+```
+
+Compile all configured nodes:
+
+```bash
+just compile-all
+```

@@ -1,0 +1,184 @@
+{
+  "name": "kafhud-config-ui-fabric",
+  "steps": [
+    {
+      "action": "wait_ms",
+      "durationMs": 3500
+    },
+    {
+      "action": "activate_widget",
+      "label": "Mods",
+      "contains": true,
+      "waitAfterMs": 800
+    },
+    {
+      "action": "wait_for_screen",
+      "title": "Mods",
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "click_list_entry",
+      "label": "KafHUD",
+      "contains": false,
+      "nth": 0,
+      "listRole": "mod_list",
+      "waitAfterMs": 300
+    },
+    {
+      "action": "activate_widget_class",
+      "widgetClass": "com.terraformersmc.modmenu.gui.widget.LegacyTexturedButtonWidget",
+      "nth": 1,
+      "waitAfterMs": 800
+    },
+    {
+      "action": "wait_for_screen",
+      "screenClass": "com.iamkaf.konfig.impl.v1.KonfigConfigScreen",
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "General",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Enable HUD",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Background Mode",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Background Color",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Coordinates",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "scroll_mouse",
+      "x": 140,
+      "y": 120,
+      "horizontalAmount": 0.0,
+      "verticalAmount": -8.0
+    },
+    {
+      "action": "wait_ms",
+      "durationMs": 250
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Show Direction",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Direction Display Mode",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "scroll_mouse",
+      "x": 140,
+      "y": 120,
+      "horizontalAmount": 0.0,
+      "verticalAmount": -8.0
+    },
+    {
+      "action": "wait_ms",
+      "durationMs": 250
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Coordinates Color",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "North Direction Color",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "scroll_mouse",
+      "x": 140,
+      "y": 120,
+      "horizontalAmount": 0.0,
+      "verticalAmount": -8.0
+    },
+    {
+      "action": "wait_ms",
+      "durationMs": 250
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Biome",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Biome Color",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "scroll_mouse",
+      "x": 140,
+      "y": 120,
+      "horizontalAmount": 0.0,
+      "verticalAmount": -8.0
+    },
+    {
+      "action": "wait_ms",
+      "durationMs": 250
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Day Counter",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "wait_for_list_entry",
+      "label": "Day Counter Color",
+      "contains": false,
+      "timeoutMs": 5000,
+      "pollMs": 100
+    },
+    {
+      "action": "screenshot",
+      "name": "kafhud-config-ui",
+      "hideOverlay": true,
+      "hideDecoration": true,
+      "hideWindowDecoration": true
+    }
+  ],
+  "cleanup": []
+}

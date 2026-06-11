@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 See the full changelog at https://github.com/iamkaf/kaf-hud
 
+## 6.0.0
+
+### Added
+
+- Added a configurable day counter HUD row.
+- Added in-game configuration screens for supported loaders.
+- Added per-feature toggles and configurable text colors for coordinates, direction, biome, and day counter.
+- Added direction display modes for text labels and arrow symbols.
+- Added configurable HUD backgrounds, with off, single-panel, and per-line modes.
+
+### Changed
+
+- BREAKING: KafHUD now requires Konfig for configuration support.
+  - Get it from [Modrinth](https://modrinth.com/mod/konfig) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/konfig)
+
 ## 5.0.0
 
 ### Changed
