@@ -30,4 +30,5 @@ runs/
 # Generated resources and caches
 common/src/main/generated/
 .cache/
+.teakit/
 *.bak
