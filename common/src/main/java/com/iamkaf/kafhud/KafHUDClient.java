@@ -56,11 +56,7 @@ public class KafHUDClient {
     public static void onRenderHUD(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
 
-        if (mc.getDebugOverlay().showDebugScreen()) {
-            return;
-        }
-
-        if (mc.options.hideGui) {
+        if (!ClientFunctions.shouldRenderHud()) {
             return;
         }
 
