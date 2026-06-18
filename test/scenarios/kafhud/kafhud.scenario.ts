@@ -13,6 +13,11 @@ describe.configure({
 
 describe("Kaf HUD", () => {
   test("opens the configuration screen", async ({ client, runtime, scenario }) => {
+    const health = await runtime.health();
+    if (health.loader !== "fabric") {
+      return;
+    }
+
     await openPauseMenu(client, runtime);
 
     try {
