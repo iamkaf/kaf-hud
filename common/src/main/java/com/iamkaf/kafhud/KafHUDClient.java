@@ -9,7 +9,10 @@ import com.iamkaf.kafhud.util.StringUtil;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+//? if >=26.1
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+//? if <26.1
+/*import net.minecraft.client.gui.GuiGraphics;*/
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Direction;
@@ -53,7 +56,10 @@ public class KafHUDClient {
         HudEvents.RENDER_HUD.register(KafHUDClient::onRenderHUD);
     }
 
+    //? if >=26.1
     public static void onRenderHUD(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
+    //? if <26.1
+    /*public static void onRenderHUD(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {*/
         Minecraft mc = Minecraft.getInstance();
 
         if (!ClientFunctions.shouldRenderHud()) {
@@ -123,7 +129,10 @@ public class KafHUDClient {
         return rows;
     }
 
+    //? if >=26.1
     private static void renderBackground(GuiGraphicsExtractor guiGraphics, int x, int y, List<HudRow> rows) {
+    //? if <26.1
+    /*private static void renderBackground(GuiGraphics guiGraphics, int x, int y, List<HudRow> rows) {*/
         KafHUDConfig.BackgroundMode mode = KafHUDConfig.backgroundMode();
         if (mode == KafHUDConfig.BackgroundMode.OFF) {
             return;
@@ -169,7 +178,10 @@ public class KafHUDClient {
         }
     }
 
+    //? if >=26.1
     private static void renderRows(GuiGraphicsExtractor guiGraphics, Font font, int x, int y, List<HudRow> rows) {
+    //? if <26.1
+    /*private static void renderRows(GuiGraphics guiGraphics, Font font, int x, int y, List<HudRow> rows) {*/
         for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
             int rowX = x;
             int rowY = y + LINE_SPACING * rowIndex;
@@ -228,7 +240,10 @@ public class KafHUDClient {
     }
 
     private static Component makeDayComponent(Player player) {
+        //? if >=26.1
         long day = player.level().getOverworldClockTime() / 24000;
+        //? if <26.1
+        /*long day = player.level().getDayTime() / 24000;*/
         return Component.translatable("text.kafhud.day", day);
     }
 
@@ -247,10 +262,13 @@ public class KafHUDClient {
         String coordinates = String.format("%.2f %.2f %.2f", player.getX(), player.getY(), player.getZ());
         Minecraft.getInstance().keyboardHandler.setClipboard(coordinates);
 
-        player.sendOverlayMessage(
-                Component.translatable("text.kafhud.coordinates_copied", coordinates)
-                        .withStyle(Style.EMPTY.withColor(0xfcb8de))
-        );
+        Component copiedMessage = Component.translatable("text.kafhud.coordinates_copied", coordinates)
+                .withStyle(Style.EMPTY.withColor(0xfcb8de));
+
+        //? if >=26.1
+        player.sendOverlayMessage(copiedMessage);
+        //? if <26.1
+        /*player.displayClientMessage(copiedMessage, true);*/
 
         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.NOTE_BLOCK_BELL, 1.5f));
     }
