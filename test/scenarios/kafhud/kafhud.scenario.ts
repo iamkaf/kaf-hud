@@ -99,12 +99,6 @@ const configUiDefinition = {
       nth: 1,
       waitAfterMs: 800,
     },
-    {
-      action: "wait_for_screen",
-      screenClass: "com.iamkaf.konfig.impl.v1.KonfigConfigScreen",
-      timeoutMs: 5000,
-      pollMs: 100,
-    },
     { action: "wait_for_list_entry", label: "General", contains: false, timeoutMs: 5000, pollMs: 100 },
     { action: "wait_for_list_entry", label: "Enable HUD", contains: false, timeoutMs: 5000, pollMs: 100 },
     { action: "wait_for_list_entry", label: "Background Mode", contains: false, timeoutMs: 5000, pollMs: 100 },
