@@ -1,0 +1,10 @@
+{
+  "key.category.kafhud.kafhud": "Kaf HUD",
+  "key.kafhud.toggle_hud": "Ativar HUD",
+  "text.kafhud.coordinates_copied": "§e[*] §fCoordenadas copiadas para a área de transferência: %s",
+  "text.kafhud.direction.east": "leste",
+  "text.kafhud.direction.north": "norte",
+  "text.kafhud.direction.south": "sul",
+  "text.kafhud.direction.west": "oeste",
+  "text.kafhud.wrong_tool_indicator": "Ferramenta Incorreta!"
+}

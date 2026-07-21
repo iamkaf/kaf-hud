@@ -1,0 +1,10 @@
+{
+  "key.category.kafhud.kafhud": "Kaf HUD",
+  "key.kafhud.toggle_hud": "HUD umschalten",
+  "text.kafhud.coordinates_copied": "§e[*] §fKoordinaten zwischengespeichert: %s",
+  "text.kafhud.direction.east": "ost",
+  "text.kafhud.direction.north": "nord",
+  "text.kafhud.direction.south": "süd",
+  "text.kafhud.direction.west": "west",
+  "text.kafhud.wrong_tool_indicator": "Falsches Werkzeug!"
+}

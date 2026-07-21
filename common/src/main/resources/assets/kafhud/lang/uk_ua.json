@@ -1,0 +1,10 @@
+{
+  "key.category.kafhud.kafhud": "Kaf HUD",
+  "key.kafhud.toggle_hud": "Toggle HUD",
+  "text.kafhud.coordinates_copied": "§e[*] §fКоординати скопійовано: %s",
+  "text.kafhud.direction.east": "схід",
+  "text.kafhud.direction.north": "північ",
+  "text.kafhud.direction.south": "південь",
+  "text.kafhud.direction.west": "захід",
+  "text.kafhud.wrong_tool_indicator": "Неправильний інструмент!"
+}

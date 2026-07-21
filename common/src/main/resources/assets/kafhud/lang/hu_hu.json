@@ -1,0 +1,10 @@
+{
+  "key.category.kafhud.kafhud": "Kaf HUD",
+  "key.kafhud.toggle_hud": "HUD váltása",
+  "text.kafhud.coordinates_copied": "§e[*] §fKoordináták a vágólapra másolva: %s",
+  "text.kafhud.direction.east": "kelet",
+  "text.kafhud.direction.north": "észak",
+  "text.kafhud.direction.south": "dél",
+  "text.kafhud.direction.west": "nyugat",
+  "text.kafhud.wrong_tool_indicator": "Rossz eszköz!"
+}
