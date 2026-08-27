@@ -13,6 +13,10 @@ See the full changelog at https://github.com/iamkaf/kaf-hud
 
 - Added German, Hungarian, Brazilian Portuguese, and Ukrainian translations.
 
+### Changed
+
+- Forge and NeoForge now declare an unrestricted Konfig version range.
+
 ## 6.1.0
 
 ### Changed
