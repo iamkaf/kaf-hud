@@ -16,42 +16,6 @@ describe.configure({
 });
 
 describe("Kaf HUD", () => {
-  test("opens the configuration screen", async (ctx) => {
-    const health = await ctx.runtime.health();
-    if (health.loader !== "fabric") return;
-
-    await openPauseMenu(ctx);
-    try {
-      let screen = await ctx.client.screen();
-      await screen.widgets().activate({ label: "Mods", contains: true });
-      screen = await ctx.client.waitForScreen("Mods", { timeoutMs: 5_000 });
-      await screen.lists("mod_list").entry({ label: "KafHUD", nth: 0 }).activate();
-      await ctx.runtime.wait(300);
-      screen = await ctx.client.screen();
-      await activateConfigure(screen);
-      await ctx.runtime.wait(800);
-
-      screen = await waitForEntry(ctx, "General");
-      for (const label of ["Enable HUD", "Background Mode", "Background Color", "Coordinates"]) {
-        expect(screen.lists().entries().map((entry) => entry.label)).toContain(label);
-      }
-
-      for (const labels of [
-        ["Show Direction", "Direction Display Mode"],
-        ["Coordinates Color", "North Direction Color"],
-        ["Biome", "Biome Color"],
-        ["Day Counter", "Day Counter Color"],
-      ]) {
-        screen = await screen.scroll({ vertical: -8 });
-        await ctx.runtime.wait(250);
-        for (const label of labels) await waitForEntry(ctx, label);
-      }
-      await ctx.client.screenshot("kafhud-config-ui");
-    } finally {
-      await ctx.client.closeMenus();
-    }
-  });
-
   test("renders the in-game overlay", async (ctx) => {
     await ctx.client.closeMenus();
     await ctx.commands.batch([
@@ -79,17 +43,42 @@ describe("Kaf HUD", () => {
       ]);
     }
   });
-});
 
-async function openPauseMenu(ctx: TeaKitTestContext) {
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    await ctx.client.key(256, { release: true }).catch(() => undefined);
-    await ctx.runtime.wait(500).catch(() => undefined);
-    const screen = await ctx.client.screen().catch(() => null);
-    if (screen?.title === "Game Menu" || screen?.id === "pause") return;
-  }
-  throw new Error("Failed to open the pause menu before the Kaf HUD config test");
-}
+  test("opens the configuration screen", async (ctx) => {
+    const health = await ctx.runtime.health();
+    if (health.loader !== "fabric") return;
+
+    await ctx.client.leaveWorld();
+    await ctx.client.waitForScreen("Title", { timeoutMs: 30_000 });
+    try {
+      let screen = await ctx.client.screen();
+      await screen.widgets().activate({ label: "Mods", contains: true });
+      screen = await ctx.client.waitForScreen("Mods", { timeoutMs: 5_000 });
+      await screen.lists("mod_list").entry({ label: "KafHUD", nth: 0 }).activate();
+      await ctx.runtime.wait(300);
+      screen = await ctx.client.screen();
+      await activateConfigure(screen);
+      await ctx.runtime.wait(800);
+
+      screen = await waitForEntry(ctx, "General");
+      for (const label of ["Enable HUD", "Background Mode", "Background Color", "Coordinates"]) {
+        expect(screen.lists().entries().map((entry) => entry.label)).toContain(label);
+      }
+
+      for (const label of [
+        "Show Direction", "Direction Display Mode",
+        "Coordinates Color", "North Direction Color",
+        "Biome", "Biome Color", "Day Counter", "Day Counter Color",
+      ]) {
+        screen = await scrollToEntry(ctx, label);
+      }
+      await ctx.client.screenshot("kafhud-config-ui");
+    } finally {
+      const screen = await ctx.client.screen();
+      await screen.widgets().activate({ label: "Done" });
+    }
+  });
+});
 
 async function activateConfigure(screen: ClientScreen) {
   const selectors = [
@@ -116,4 +105,14 @@ async function waitForEntry(ctx: TeaKitTestContext, label: string): Promise<Clie
     await ctx.runtime.wait(100);
   }
   throw new Error(`Timed out waiting for Kaf HUD config entry: ${label}`);
+}
+
+async function scrollToEntry(ctx: TeaKitTestContext, label: string): Promise<ClientScreen> {
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    const screen = await ctx.client.screen();
+    if (screen.lists().entries().some((entry) => entry.label === label)) return screen;
+    await screen.scroll({ vertical: -2 });
+    await ctx.runtime.wait(100);
+  }
+  throw new Error(`Could not scroll to Kaf HUD config entry: ${label}`);
 }
