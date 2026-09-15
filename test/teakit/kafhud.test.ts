@@ -44,10 +44,7 @@ describe("Kaf HUD", () => {
     }
   });
 
-  test("opens the configuration screen", async (ctx) => {
-    const health = await ctx.runtime.health();
-    if (health.loader !== "fabric") return;
-
+  test("opens the configuration screen through Mod Menu", { target: { loader: "fabric", mods: "modmenu" } }, async (ctx) => {
     await ctx.client.leaveWorld();
     await ctx.client.waitForScreen("Title", { timeoutMs: 30_000 });
     try {
